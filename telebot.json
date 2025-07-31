@@ -1,0 +1,302 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.message.text }}",
+        "options": {
+          "systemMessage": "Final System Prompt for AI Agent:\n You are a data extraction assistant for SD Jain College. Your task is to process \nstudent inquiry messages and extract the following information:\n \"Full Name\"\n \"Phone Number\"\n \"Email Address\"\n \"Interested Course (e.g., BCA, MBA, BBA, etc.)\"\n \"if chose bca so what tech in bca ,if chose bba so what tech in bba for same \nb.com and other fields\"\nThis data will then be transferred to a Google Sheet connected via a Google \nForm, so ensure all fields are clearly and correctly filled for seamless\n you don't have to tell the user to that you data is transfer to google sheet \nand asking the specialization form user is compulsory and after taking \nspecialization prepare 4 month roadmap for this sub and display the  \nroadmap.\n After extracting, generate a 4-month roadmap based on the specialization. \nFormat it in HTML and make it suitable for email.\nExample Output:\n {\n  \"name\": \"Ravi Sharma\",\n  \"phone\": \"9876543210\",\n  \"email\": \"ravi@example.com\",\n  \"course\": \"BCA\",\n  \"specialization\": \"Web Development\",\n  \"roadmap\": \"<h1>Month 1</h1><p>HTML, CSS Basics</p>...<h1>Month 4</h1><p>Portfolio \n& Projects</p>\"\n }\"\n\nSend Email Only if all Fields are Complete.\nDon't Tell User About The Mail.\n\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        -912,
+        -400
+      ],
+      "id": "a9f0627b-65d3-4bfd-9a07-5a08ebe94e54",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.3-70b-versatile",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -1024,
+        -192
+      ],
+      "id": "be1ee3c5-088b-44f8-95af-764db6a2de5d",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "vYlBzTemPGGfceCM",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.message.text }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -880,
+        -192
+      ],
+      "id": "d04320b3-f0c2-42ed-8525-dadf5c35bf89",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1J3iKP18eh1Z9k-_GrVocb6FjjFM8w91RuTA4Tu_Xgm0",
+          "mode": "list",
+          "cachedResultName": "Agentic AI Workshop 26",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1J3iKP18eh1Z9k-_GrVocb6FjjFM8w91RuTA4Tu_Xgm0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1J3iKP18eh1Z9k-_GrVocb6FjjFM8w91RuTA4Tu_Xgm0/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Emali": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Emali__using_to_match_', ``, 'string') }}",
+            "Name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Name', ``, 'string') }}",
+            "Number": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Number', ``, 'string') }}",
+            "Course": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Course', ``, 'string') }}",
+            "Specialization": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Specialization', ``, 'string') }}"
+          },
+          "matchingColumns": [
+            "Emali"
+          ],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Number",
+              "displayName": "Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Emali",
+              "displayName": "Emali",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Course",
+              "displayName": "Course",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Specialization",
+              "displayName": "Specialization",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.6,
+      "position": [
+        -736,
+        -192
+      ],
+      "id": "4ca6828a-91fa-4b57-b349-2d27e1629cbb",
+      "name": "Append or update row in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "waxsdm1xysKevgZO",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', ``, 'string') }}",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        -576,
+        -192
+      ],
+      "id": "23b75609-6ff3-4a78-a896-898c34ca6eae",
+      "name": "Send a message in Gmail",
+      "webhookId": "97e3c616-02c8-4b3c-bcfc-d9b0cc96e5c2",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "K1vD64zjSPOkvTkb",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1104,
+        -400
+      ],
+      "id": "34da8eca-b147-4332-8c78-33cf55cbfc09",
+      "name": "Telegram Trigger",
+      "webhookId": "1c971cdd-4df4-4040-948a-ed21edadfda9",
+      "credentials": {
+        "telegramApi": {
+          "id": "dco5hgmSL34IbLmS",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.from.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -560,
+        -400
+      ],
+      "id": "95a9d0c2-f811-459e-afac-7fe8b0314a1c",
+      "name": "Send a text message",
+      "webhookId": "6f7649af-f94f-4905-90db-4672716edf5f",
+      "credentials": {
+        "telegramApi": {
+          "id": "dco5hgmSL34IbLmS",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message in Gmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "2a8c564b-4136-4c91-9ad5-0cc65246605c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "afb69f2c3ee013e429f95de822a128923190e250c7949b3090fc5bd9dce69e04"
+  },
+  "id": "uYjd40Gs2MLqgTMR",
+  "tags": []
+}
